@@ -304,13 +304,13 @@ export def build-aws-args [
     
     # Add required arguments
     let args_with_required = ($required_args | items { |key, value| { key: $key, value: $value } } | reduce --fold $base_args { |item, acc|
-        $acc | append [("--" + ($item.key | str replace "_" "-")), $item.value]
+        $acc | append [("--" + ($item.key | str replace --all "_" "-")), $item.value]
     })
     
     # Add optional arguments (only non-empty values)
     let final_args = ($optional_args | items { |key, value| { key: $key, value: $value } } | reduce --fold $args_with_required { |item, acc|
         if ($item.value != "" and $item.value != 0 and $item.value != false and not ($item.value | is-empty)) {
-            $acc | append [("--" + ($item.key | str replace "_" "-")), ($item.value | into string)]
+            $acc | append [("--" + ($item.key | str replace --all "_" "-")), ($item.value | into string)]
         } else {
             $acc
         }
