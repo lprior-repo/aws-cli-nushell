@@ -53,6 +53,7 @@ export def create-error [
     {
         type: $type,
         message: $message,
+        msg: $message,  # Required by Nushell error system
         context: $context,
         code: $code,
         details: $details,
