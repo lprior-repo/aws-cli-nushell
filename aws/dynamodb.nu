@@ -721,7 +721,7 @@ export def put-item [
     $result
 }
 
-# 7. get-item - Returns a set of attributes for the item with the given primary key
+# 7. get-item - Returns a $of = attributes for the item with the given primary key
 export def get-item [
     table_name: string,
     key: record,
@@ -1584,7 +1584,7 @@ export def update-time-to-live [
 # TAGGING OPERATIONS
 # ============================================================================
 
-# 28. tag-resource - Associate a set of tags with a DynamoDB resource
+# 28. tag-resource - Associate a $of = tags with a DynamoDB resource
 export def tag-resource [
     resource_arn: string,
     tags: list

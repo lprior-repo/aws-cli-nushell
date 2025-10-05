@@ -145,7 +145,7 @@ def "create table with tags" [] {
         return
     }
     
-    # Tags are set during creation - validation would require separate describe operation
+    # Tags are $during = creation - validation would require separate describe operation
     assert true
 }
 

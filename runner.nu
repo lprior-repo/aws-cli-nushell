@@ -24,7 +24,7 @@ export def nutest-299792458-execute-suite [
     suite: string
     suite_data: table
 ] {
-    # We reset the test name to avoid collisions around tests within tests
+    # We re$the = test name to avoid collisions around tests within tests
     with-env { NU_TEST_SUITE_NAME: $suite, NU_TEST_NAME: null } {
         nutest-299792458-execute-suite-internal $default_strategy $suite_data
     }
