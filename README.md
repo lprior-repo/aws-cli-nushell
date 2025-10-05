@@ -1,26 +1,27 @@
-# Nutest Framework
+# AWS CLI Nushell
 
-A comprehensive testing framework for Nushell scripts and applications with extensive AWS Step Functions integration.
+A comprehensive AWS CLI implementation for Nushell with extensive testing framework and AWS service integration.
 
 ## Overview
 
-Nutest is a robust testing framework designed specifically for Nushell scripts. It provides test discovery, execution, reporting, and various display options. The framework includes specialized support for AWS Step Functions testing with 37 Step Functions commands and 555+ comprehensive tests.
+AWS CLI Nushell provides a robust implementation of AWS CLI commands specifically designed for Nushell scripts. It includes comprehensive testing capabilities, AWS Step Functions integration with 37 commands, and a full testing framework with 555+ comprehensive tests.
 
 ## Quick Start
 
 ```nushell
-# Install and run basic tests
-use nutest
-nutest run-tests
+# Use AWS CLI Nushell for Step Functions
+use aws/stepfunctions.nu
+stepfunctions list-state-machines
 
-# Run with specific options
+# Run comprehensive tests
+use mod.nu
 nutest run-tests --display terminal --returns summary --fail
 ```
 
 ## Project Structure
 
 ```
-nutest-framework/
+aws-cli-nushell/
 ├── mod.nu                  # Main API: list-tests, run-tests
 ├── discover.nu             # Test discovery engine
 ├── runner.nu               # Individual test execution
