@@ -1,0 +1,230 @@
+{
+  "metadata": {
+    "apiVersion": "2016-11-23",
+    "endpointPrefix": "states",
+    "jsonVersion": "1.0",
+    "protocol": "json",
+    "serviceFullName": "AWS Step Functions",
+    "serviceId": "SFN",
+    "signatureVersion": "v4",
+    "targetPrefix": "AWSStepFunctions",
+    "uid": "states-2016-11-23"
+  },
+  "operations": {
+    "ListStateMachines": {
+      "name": "ListStateMachines",
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      },
+      "input": {
+        "shape": "ListStateMachinesInput"
+      },
+      "output": {
+        "shape": "ListStateMachinesOutput"
+      },
+      "errors": [
+        {
+          "shape": "InvalidParameterValue"
+        }
+      ],
+      "documentation": "Lists the existing state machines."
+    },
+    "CreateStateMachine": {
+      "name": "CreateStateMachine",
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      },
+      "input": {
+        "shape": "CreateStateMachineInput"
+      },
+      "output": {
+        "shape": "CreateStateMachineOutput"
+      },
+      "errors": [
+        {
+          "shape": "InvalidArn"
+        },
+        {
+          "shape": "StateMachineAlreadyExists"
+        }
+      ]
+    }
+  },
+  "shapes": {
+    "ListStateMachinesInput": {
+      "type": "structure",
+      "members": {
+        "maxResults": {
+          "shape": "PageSize"
+        },
+        "nextToken": {
+          "shape": "PageToken"
+        }
+      }
+    },
+    "ListStateMachinesOutput": {
+      "type": "structure",
+      "required": [
+        "stateMachines"
+      ],
+      "members": {
+        "stateMachines": {
+          "shape": "StateMachineList"
+        },
+        "nextToken": {
+          "shape": "PageToken"
+        }
+      }
+    },
+    "CreateStateMachineInput": {
+      "type": "structure",
+      "required": [
+        "name",
+        "definition",
+        "roleArn"
+      ],
+      "members": {
+        "name": {
+          "shape": "Name"
+        },
+        "definition": {
+          "shape": "Definition"
+        },
+        "roleArn": {
+          "shape": "Arn"
+        },
+        "type": {
+          "shape": "StateMachineType"
+        }
+      }
+    },
+    "CreateStateMachineOutput": {
+      "type": "structure",
+      "required": [
+        "stateMachineArn",
+        "creationDate"
+      ],
+      "members": {
+        "stateMachineArn": {
+          "shape": "Arn"
+        },
+        "creationDate": {
+          "shape": "Timestamp"
+        }
+      }
+    },
+    "StateMachineList": {
+      "type": "list",
+      "member": {
+        "shape": "StateMachineListItem"
+      }
+    },
+    "StateMachineListItem": {
+      "type": "structure",
+      "required": [
+        "stateMachineArn",
+        "name",
+        "type",
+        "creationDate"
+      ],
+      "members": {
+        "stateMachineArn": {
+          "shape": "Arn"
+        },
+        "name": {
+          "shape": "Name"
+        },
+        "type": {
+          "shape": "StateMachineType"
+        },
+        "creationDate": {
+          "shape": "Timestamp"
+        }
+      }
+    },
+    "PageSize": {
+      "type": "integer",
+      "max": 1000,
+      "min": 0
+    },
+    "PageToken": {
+      "type": "string",
+      "max": 1024,
+      "min": 1
+    },
+    "Name": {
+      "type": "string",
+      "max": 80,
+      "min": 1
+    },
+    "Definition": {
+      "type": "string",
+      "max": 1048576,
+      "min": 1,
+      "sensitive": true
+    },
+    "Arn": {
+      "type": "string",
+      "max": 256,
+      "min": 1
+    },
+    "StateMachineType": {
+      "type": "string",
+      "enum": [
+        "STANDARD",
+        "EXPRESS"
+      ]
+    },
+    "Timestamp": {
+      "type": "timestamp"
+    },
+    "InvalidParameterValue": {
+      "type": "structure",
+      "members": {
+        "message": {
+          "shape": "ErrorMessage"
+        }
+      },
+      "exception": true
+    },
+    "InvalidArn": {
+      "type": "structure",
+      "members": {
+        "message": {
+          "shape": "ErrorMessage"
+        }
+      },
+      "exception": true,
+      "error": {
+        "httpStatusCode": 400
+      }
+    },
+    "StateMachineAlreadyExists": {
+      "type": "structure",
+      "members": {
+        "message": {
+          "shape": "ErrorMessage"
+        }
+      },
+      "exception": true,
+      "error": {
+        "httpStatusCode": 409
+      }
+    },
+    "ErrorMessage": {
+      "type": "string"
+    }
+  },
+  "pagination": {
+    "ListStateMachines": {
+      "input_token": "nextToken",
+      "limit_key": "maxResults",
+      "output_token": "nextToken",
+      "result_key": [
+        "stateMachines"
+      ]
+    }
+  }
+}

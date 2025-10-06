@@ -1,0 +1,23 @@
+{
+  "metadata": {
+    "apiVersion": "2023-01-01"
+  },
+  "operations": {
+    "BadOperation": {
+      "http": {},
+      "input": { "shape": "NonExistentShape" },
+      "output": { "shape": "" }
+    }
+  },
+  "shapes": {
+    "IncompleteShape": {
+      "type": "structure"
+    },
+    "CircularShape": {
+      "type": "structure",
+      "members": {
+        "self": { "shape": "CircularShape" }
+      }
+    }
+  }
+}

@@ -6,9 +6,9 @@
     "auditLog": "/home/family/src/aws-cli-nushell/logs/.957e5cfe9f1d85b752b95db30fb4b31927c0acf9-audit.json",
     "files": [
         {
-            "date": 1759742600008,
+            "date": 1759744820517,
             "name": "/home/family/src/aws-cli-nushell/logs/mcp-puppeteer-2025-10-06.log",
-            "hash": "2901bf7f0cf7afc5d336779202cbe6ed09a6ea4adbab1a49f2b35e95dd49b11a"
+            "hash": "aa7befe49ef7cdd0d28fc8a7325c1031130738aefbf531a958c1e7c9a188afa9"
         }
     ],
     "hashType": "sha256"
