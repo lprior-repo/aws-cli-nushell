@@ -1,0 +1,23 @@
+# Nutest configuration for AWS CLI Nushell Framework
+
+[test]
+# Test discovery patterns
+patterns = ["test_*.nu", "*_test.nu"]
+
+# Test directories
+directories = ["tests/"]
+
+# Parallel execution
+parallel = true
+max_threads = 4
+
+[output]
+# Default output format
+format = "table"
+verbose = true
+
+[mock]
+# Mock mode environment variables for all AWS services
+environment = [
+    "STEPFUNCTIONS_MOCK_MODE=true"
+]
