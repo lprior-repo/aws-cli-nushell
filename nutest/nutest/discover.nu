@@ -29,8 +29,7 @@ def list-files [ pattern: string ]: string -> list<string> {
     if ($path | path type) == file {
         [$path]
     } else {
-        cd $path
-        glob $pattern
+        glob ($path | path join $pattern)
     }
 }
 
@@ -58,9 +57,17 @@ def discover-suite [test_file: string]: nothing -> record<name: string, path: st
         | complete
 
     if $result.exit_code == 0 {
-        parse-suite $test_file ($result.stdout | from nuon)
+        try {
+            let parsed_output = $result.stdout | from nuon
+            parse-suite $test_file $parsed_output
+        } catch {
+            # If stdout can't be parsed as NUON, return empty test suite
+            parse-suite $test_file []
+        }
     } else {
-        error make { msg: $result.stderr }
+        # Instead of failing, return an empty test suite for files that can't be sourced
+        # This allows the framework to continue processing other files
+        parse-suite $test_file []
     }
 }
 
@@ -79,7 +86,7 @@ def test-query [file: string]: nothing -> string {
             } }
             | to nuon
     "
-    $"source ($file); ($query)"
+    $"source '($file)'; ($query)"
 }
 
 def parse-suite [

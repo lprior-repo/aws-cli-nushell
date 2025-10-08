@@ -15,35 +15,48 @@
 
 # Get all available AWS services from schemas and generated modules
 export def get-available-services []: nothing -> table<service: string, operations: int, type: string, available: bool> {
-    mut services = []
-    
     # Check schemas directory for available services (handle both relative and absolute paths)
     let schema_files = try { 
         if ("schemas" | path exists) {
-            ls "schemas/*.json" | get name 
+            ls "schemas/" | where name =~ '\.json$' | get name
         } else {
             []
         }
     } catch { [] }
-    for schema_file in $schema_files {
+    
+    $schema_files | each { |schema_file|
         let service_name = ($schema_file | path basename | str replace ".json" "")
-        let schema = try { open $schema_file } catch { continue }
-        let operations_count = try { $schema.operations? | default [] | length } catch { 0 }
+        let schema = try { open $schema_file } catch { 
+            {
+                service: $service_name,
+                operations: 0,
+                type: "api",
+                available: false
+            }
+        }
+        let operations_count = try { 
+            let ops = $schema.operations? | default []
+            if ($ops | describe) =~ "^record" {
+                # Handle object format (e.g., EC2 format)
+                $ops | transpose | length
+            } else {
+                # Handle array format (e.g., S3 format)  
+                $ops | length
+            }
+        } catch { 0 }
         
         # Determine service type and availability
         let service_type = if $service_name == "s3" { "hybrid" } else { "api" }
         let service_file = $"($service_name).nu"
         let is_available = ($service_file | path exists)
         
-        $services = ($services | append {
+        {
             service: $service_name,
             operations: $operations_count,
             type: $service_type,
             available: $is_available
-        })
+        }
     }
-    
-    $services
 }
 
 # Get operations for a specific service
@@ -56,7 +69,13 @@ export def get-service-operations [service: string]: nothing -> list<string> {
     let schema = try { open $schema_file } catch { return [] }
     let operations = try { $schema.operations? | default [] } catch { return [] }
     
-    $operations | get name? | default []
+    if ($operations | describe) =~ "^record" {
+        # Handle object format (e.g., EC2 format) - get keys
+        $operations | transpose key value | get key
+    } else {
+        # Handle array format (e.g., S3 format) - get name field
+        $operations | get name? | default []
+    }
 }
 
 # Check if an operation is a high-level S3 command
@@ -75,6 +94,29 @@ def resolve-service [service: string, operation: string]: nothing -> string {
         }
     } else {
         $service
+    }
+}
+
+# Convert operation name from schema format to AWS CLI format
+def convert-operation-name [operation: string]: nothing -> string {
+    # Convert camelCase/compound words to kebab-case for AWS CLI
+    # Special handling for common AWS operation patterns
+    match $operation {
+        "listbuckets" => "list-buckets"
+        "listobjects" => "list-objects"
+        "listobjectsv2" => "list-objects-v2"
+        "createbucket" => "create-bucket"
+        "deletebucket" => "delete-bucket"
+        "putobject" => "put-object"
+        "getobject" => "get-object"
+        "deleteobject" => "delete-object"
+        "headobject" => "head-object"
+        "headbucket" => "head-bucket"
+        "copyobject" => "copy-object"
+        _ => {
+            # Generic conversion for other operations
+            $operation | str replace --all '_' '-' | str replace --regex '([a-z])([A-Z])' '${1}-${2}' | str downcase
+        }
     }
 }
 
@@ -145,7 +187,9 @@ export def main [
 
 # Route command to the appropriate service module
 def route-to-service [service: string, operation: string, args: list<string>]: nothing -> any {
-    let service_file = $"($service).nu"
+    # Map back to the actual service file (s3api operations are in s3.nu)
+    let service_file = if $service == "s3api" { "s3.nu" } else { $"($service).nu" }
+    let original_service = if $service == "s3api" { "s3" } else { $service }
     
     if not ($service_file | path exists) {
         return (error make {
@@ -170,13 +214,14 @@ def route-to-service [service: string, operation: string, args: list<string>]: n
         # Execute the service operation
         if $service == "s3" and (is-s3-high-level $operation) {
             # High-level S3 commands
-            run-external "aws" (["s3", $operation] | append $args)
+            let full_args = (["s3", $operation] | append $args)
+            run-external "aws" ...$full_args
         } else {
             # Use the generated service module
             let full_command = $"aws ($service) ($operation)"
             
             # Check if we're in mock mode
-            let mock_env_var = $"($service | str upcase)_MOCK_MODE"
+            let mock_env_var = $"($original_service | str upcase)_MOCK_MODE"
             let mock_mode = try { $env | get $mock_env_var | into bool } catch { false }
             
             if $mock_mode {
@@ -189,8 +234,10 @@ def route-to-service [service: string, operation: string, args: list<string>]: n
                     message: $"Mock response for ($service) ($operation)"
                 }
             } else {
-                # Execute actual AWS CLI command
-                run-external "aws" ([$service, $operation] | append $args) | from json
+                # Execute actual AWS CLI command with proper operation name conversion
+                let aws_operation = (convert-operation-name $operation)
+                let full_args = ([$service, $aws_operation] | append $args)
+                run-external "aws" ...$full_args | from json
             }
         }
     } catch { |err|
@@ -226,7 +273,7 @@ def show-help []: nothing -> table<service: string, operations: int, status: str
     print "Available Services:"
     
     let services = (get-available-services)
-    $services | select service operations status | insert status { |row|
+    $services | select service operations available | insert status { |row|
         if $row.available { "✅ available" } else { "⏳ not generated" }
     } | insert description { |row|
         match $row.service {

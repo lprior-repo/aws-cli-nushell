@@ -300,42 +300,45 @@ export def measure-plugin-performance [
 
 # Validate plugin system health
 export def validate-plugin-health []: nothing -> record {
-    mut health_results = []
-    
-    # Test configuration system
-    try {
+    # Test each component and collect results
+    let configuration_result = try {
         use plugin/core/configuration.nu
         configuration get "debug" | ignore
-        $health_results = ($health_results | append {component: "configuration", status: "healthy"})
+        {component: "configuration", status: "healthy"}
     } catch { |err|
-        $health_results = ($health_results | append {component: "configuration", status: "error", error: $err.msg})
+        {component: "configuration", status: "error", error: $err.msg}
     }
     
-    # Test service registry
-    try {
+    let service_registry_result = try {
         use ../plugin/core/service_registry.nu
         service_registry get-service-statistics | ignore
-        $health_results = ($health_results | append {component: "service_registry", status: "healthy"})
+        {component: "service_registry", status: "healthy"}
     } catch { |err|
-        $health_results = ($health_results | append {component: "service_registry", status: "error", error: $err.msg})
+        {component: "service_registry", status: "error", error: $err.msg}
     }
     
-    # Test completion system
-    try {
+    let completion_system_result = try {
         use ../plugin/core/completion_registry.nu
         completion_registry get-completion-stats | ignore
-        $health_results = ($health_results | append {component: "completion_system", status: "healthy"})
+        {component: "completion_system", status: "healthy"}
     } catch { |err|
-        $health_results = ($health_results | append {component: "completion_system", status: "error", error: $err.msg})
+        {component: "completion_system", status: "error", error: $err.msg}
     }
     
-    # Test main interface
-    try {
+    let main_interface_result = try {
         ^nu nuaws.nu version | ignore
-        $health_results = ($health_results | append {component: "main_interface", status: "healthy"})
+        {component: "main_interface", status: "healthy"}
     } catch { |err|
-        $health_results = ($health_results | append {component: "main_interface", status: "error", error: $err.msg})
+        {component: "main_interface", status: "error", error: $err.msg}
     }
+    
+    # Combine all results
+    let health_results = [
+        $configuration_result,
+        $service_registry_result, 
+        $completion_system_result,
+        $main_interface_result
+    ]
     
     let healthy_count = $health_results | where status == "healthy" | length
     let total_count = $health_results | length

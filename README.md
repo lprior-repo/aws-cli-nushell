@@ -1,6 +1,6 @@
-# NuAWS - Native Nushell AWS CLI Plugin
+# NuAWS - Unified AWS CLI Module for Nushell
 
-A comprehensive AWS CLI implementation designed specifically for Nushell, providing type-safe AWS operations with native shell integration, intelligent caching, and comprehensive testing capabilities.
+A comprehensive AWS CLI implementation designed specifically for Nushell, providing the natural `nuaws <service> <operation>` interface with external completions, type safety, and full pipeline integration.
 
 ## 🚀 Quick Start
 
@@ -11,42 +11,44 @@ A comprehensive AWS CLI implementation designed specifically for Nushell, provid
 git clone https://github.com/lprior-repo/aws-cli-nushell.git
 cd aws-cli-nushell
 
-# Import the plugin
-use nuaws_simple.nu
+# Import the main module
+use nuaws.nu
 
-# Initialize the system
-nuaws_simple nuaws init
-
-# Check status
-nuaws_simple nuaws status
+# Start using AWS commands
+nuaws stepfunctions list-state-machines
+nuaws help
 ```
 
 ### Basic Usage
 
 ```nushell
-# Use AWS services with native Nushell syntax
-nuaws_simple nuaws aws stepfunctions list-state-machines
-nuaws_simple nuaws aws s3 list-buckets
-nuaws_simple nuaws aws ec2 describe-instances
+# Natural AWS command syntax
+nuaws stepfunctions list-state-machines
+nuaws stepfunctions describe-state-machine --state-machine-arn "arn:aws:..."
 
-# Manage the plugin system
-nuaws_simple nuaws core config show
-nuaws_simple nuaws core services list
-nuaws_simple nuaws test health
+# External completions for AWS resources
+nuaws s3 ls --bucket <TAB>        # Shows your S3 buckets
+nuaws ec2 describe-instances <TAB> # Shows instance IDs
+
+# Pipeline integration
+nuaws stepfunctions list-state-machines 
+| where status == "ACTIVE" 
+| select name creation_date
+| sort-by creation_date
 ```
 
 ## ✨ Key Features
 
-### 🎯 **Native Module System**
-- **Single Import**: `use nuaws_simple.nu` provides access to entire system
-- **Modular Architecture**: Core components can be imported individually
-- **Nushell Integration**: Designed specifically for Nushell 0.107.0+
+### 🎯 **Unified Module System**
+- **Natural Syntax**: `nuaws <service> <operation>` interface
+- **External Completions**: Dynamic AWS resource discovery and completion
+- **Pure Nushell**: No binary compilation required, easy distribution
 
-### 🔧 **Core Infrastructure**
-- **Service Registry**: Dynamic AWS service discovery and registration
-- **Intelligent Caching**: Performance optimization with LRU eviction
-- **Configuration Management**: Centralized settings and preferences
-- **Shell Completions**: AWS resource discovery for tab completion
+### 🔧 **Core Infrastructure**  
+- **Service Registry**: Dynamic AWS service discovery and loading
+- **Universal Generator**: Auto-generate any AWS service from CLI schemas
+- **Mock-First Testing**: Comprehensive testing with 555+ tests
+- **Pipeline Integration**: Native Nushell data structures and chaining
 
 ### 🧪 **Comprehensive Testing**
 - **Extended nutest Framework**: Plugin-specific testing capabilities

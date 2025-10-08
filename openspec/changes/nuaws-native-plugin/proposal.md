@@ -1,8 +1,8 @@
-# Native Nushell AWS CLI Plugin Proposal
+# Native Nushell AWS CLI Module System with External Completions
 
 ## Summary
 
-Transform the existing AWS CLI generator into a comprehensive native Nushell plugin system that provides `nuaws` as a first-class entry point. This creates a complete AWS CLI superset that leverages all Nushell features including type safety, pipeline integration, external completions, and feels like a core part of the Nushell ecosystem.
+Transform the existing AWS CLI generator into a comprehensive native Nushell module system that provides modular AWS service integration with external completions. This creates a complete AWS CLI superset that leverages all Nushell features including type safety, pipeline integration, external completions, and feels like a core part of the Nushell ecosystem through individual modules rather than a centralized plugin.
 
 ## Problem Statement
 
@@ -16,8 +16,8 @@ The current system has excellent foundations but lacks the integration needed fo
 - ✅ Individual service modules (Step Functions, etc.)
 
 ### Missing Components
-- ❌ Unified `nuaws` entry point for all AWS services
-- ❌ Plugin system architecture for seamless integration
+- ❌ Individual module integration with external completions
+- ❌ Modular service architecture for independent loading
 - ❌ External completion system for live AWS resource discovery
 - ❌ Native pipeline integration with all nushell commands
 - ❌ Dynamic service loading and command discovery

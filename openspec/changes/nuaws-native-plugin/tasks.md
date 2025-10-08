@@ -1,13 +1,13 @@
-# Implementation Tasks for Native Nushell AWS Plugin
+# Implementation Tasks for Native Nushell AWS Module System with External Completions
 
-## Phase 1: Core Plugin Infrastructure (Foundation)
+## Phase 1: Core Module Infrastructure (Foundation)
 
-### 1.1 Plugin Entry Point System
-- [x] Create `nuaws.nu` main entry point with service routing
-- [x] Implement service discovery and lazy loading mechanism  
-- [x] Build command argument forwarding system
-- [x] Add global help and service listing functionality
-- [x] Create plugin configuration management (cache, credentials, regions)
+### 1.1 Module System Architecture
+- [x] Create modular service architecture with independent loading
+- [x] Implement external completion framework for modules
+- [x] Build consistent module interface patterns  
+- [x] Add module metadata and documentation system
+- [x] Create module configuration management (cache, credentials, regions)
 
 ### 1.2 Service Module Loading
 - [x] Design service module interface and contract
@@ -23,9 +23,9 @@
 - [x] Add completion validation and error handling
 - [x] Create completion performance benchmarking utilities
 
-### 1.4 Plugin Testing Infrastructure
-- [x] Extend nutest framework for plugin testing scenarios
-- [x] Create plugin-specific test patterns and helpers
+### 1.4 Module Testing Infrastructure
+- [x] Extend nutest framework for modular testing scenarios
+- [x] Create module-specific test patterns and helpers
 - [x] Implement service module testing automation
 - [x] Add completion testing and validation utilities
 - [x] Build integration test framework for end-to-end scenarios
@@ -35,45 +35,48 @@
 
 ## Phase 2: Enhanced Universal Generator (Code Generation)
 
-### 2.1 Plugin-Aware Generator Core
-- [x] Upgrade `universal_aws_generator.nu` for plugin output format
-- [x] Create plugin module template generation system
+### 2.1 Module-Aware Generator Core
+- [x] Upgrade `universal_aws_generator.nu` for modular output format
+- [x] Create module template generation system with external completions
 - [x] Implement service-specific customization hooks
 - [x] Add generator configuration and option management
 - [x] Build generator validation and quality checks
+- [x] Fix AWS CLI help parsing with backspace character handling
+- [x] Integrate with type-safe parameter generation system
+- [x] Add comprehensive error handling and fallback generation
 
 ### 2.2 Function Signature Generation
-- [ ] Enhance parameter generation for external completions
-- [ ] Implement pipeline-optimized return type mapping
-- [ ] Create type-safe parameter validation generation
-- [ ] Add function documentation and help text generation
-- [ ] Build error message and validation generation
-- [ ] Handle complex parameter types (JSON, file://, base64://)
-- [ ] Implement automatic Nushell record to JSON conversion
-- [ ] Create filepath parameter handling for file:// syntax
+- [x] Enhance parameter generation for external completions
+- [x] Implement pipeline-optimized return type mapping
+- [x] Create type-safe parameter validation generation
+- [x] Add function documentation and help text generation
+- [x] Build error message and validation generation
+- [x] Handle complex parameter types (JSON, file://, base64://)
+- [x] Implement automatic Nushell record to JSON conversion
+- [x] Create filepath parameter handling for file:// syntax
 
 ### 2.3 Completion Generation System
-- [ ] Create external completion function generation
-- [ ] Implement AWS resource discovery patterns
-- [ ] Build completion dependency resolution
-- [ ] Add completion performance optimization patterns
-- [ ] Create completion testing and validation generation
+- [x] Create external completion function generation
+- [x] Implement AWS resource discovery patterns
+- [x] Build completion dependency resolution
+- [x] Add completion performance optimization patterns
+- [x] Create completion testing and validation generation
 
 ### 2.4 Module Assembly and Packaging
-- [ ] Design consistent module structure and exports
-- [ ] Implement module metadata and version management
-- [ ] Create module validation and syntax checking
-- [ ] Add module documentation generation
-- [ ] Build module distribution and installation utilities
+- [x] Design consistent module structure and exports
+- [x] Implement module metadata and version management
+- [x] Create module validation and syntax checking
+- [x] Add module documentation generation
+- [x] Build module distribution and installation utilities
 
 ## Phase 3: Service Implementation (Core Services)
 
 ### 3.1 Convert Existing Services
-- [ ] Migrate Step Functions module to plugin format
-- [ ] Update existing test suites for plugin compatibility
-- [ ] Validate external completion integration
-- [ ] Ensure mock mode compatibility is preserved
-- [ ] Document migration patterns for future services
+- [x] Migrate Step Functions module to plugin format
+- [x] Update existing test suites for plugin compatibility
+- [x] Validate external completion integration
+- [x] Ensure mock mode compatibility is preserved
+- [x] Document migration patterns for future services
 
 ### 3.2 Generate Core AWS Services
 - [ ] Generate S3 service module (300+ operations)
