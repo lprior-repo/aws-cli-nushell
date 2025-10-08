@@ -2,6 +2,100 @@
 # Implementing Kent Beck TDD methodology - GREEN Phase
 # Minimal implementation to make RED phase tests pass
 
+# Parse AWS CLI operation help text into structured operation schema
+export def parse-aws-operation-help [
+    help_text: string,
+    service_name: string,
+    operation_name: string
+]: nothing -> record {
+    # Extract operation description
+    let description = $help_text 
+        | lines 
+        | take until {|line| $line | str contains "SYNOPSIS"}
+        | skip 1
+        | where {|line| ($line | str trim | str length) > 0}
+        | str join " "
+        | str trim
+    
+    # Extract parameters from OPTIONS section
+    let parameters = extract-parameters-from-help $help_text
+    
+    # Extract output information
+    let output_info = extract-output-info $help_text
+    
+    {
+        name: $operation_name,
+        service: $service_name,
+        description: $description,
+        parameters: $parameters,
+        output: $output_info,
+        help_raw: $help_text
+    }
+}
+
+# Extract parameters from AWS CLI help OPTIONS section
+def extract-parameters-from-help [help_text: string]: string -> list<record> {
+    let options_section = $help_text 
+        | lines 
+        | skip until {|line| $line | str contains "OPTIONS"}
+        | drop 1
+        | take until {|line| ($line | str contains "GLOBAL OPTIONS") or ($line | str contains "OUTPUT")}
+    
+    mut parameters = []
+    mut current_param: record = {name: "", type: "", required: false, description: ""}
+    mut has_current = false
+    
+    for line in $options_section {
+        if ($line | str starts-with "       --") {
+            # New parameter
+            if $has_current {
+                $parameters = ($parameters | append $current_param)
+            }
+            
+            let param_line = $line | str trim
+            let parts = $param_line | split row " " | where {|p| $p | str length > 0}
+            
+            if ($parts | length) > 0 {
+                $current_param = {
+                    name: ($parts.0 | str replace "--" ""),
+                    type: (if ($parts | length) > 1 and $parts.1 != "(" { "string" } else { "boolean" }),
+                    required: false,
+                    description: ""
+                }
+                $has_current = true
+            }
+        } else if $has_current and ($line | str trim | str length) > 0 {
+            # Continuation of description
+            let trimmed = $line | str trim
+            if not ($trimmed | str starts-with "--") {
+                $current_param.description = ($current_param.description + " " + $trimmed)
+            }
+        }
+    }
+    
+    # Add the last parameter
+    if $has_current {
+        $parameters = ($parameters | append $current_param)
+    }
+    
+    $parameters
+}
+
+# Extract output information from help text
+def extract-output-info [help_text: string]: string -> record {
+    let output_section = $help_text 
+        | lines 
+        | skip until {|line| $line | str contains "OUTPUT"}
+        | drop 1
+        | take until {|line| $line | str contains "EXAMPLES" or $line | str length == 0}
+        | str join "\n"
+    
+    {
+        description: ($output_section | str trim),
+        format: "json"
+    }
+}
+
 # ============================================================================
 # TDD Cycle 1: Basic Test Infrastructure (GREEN Phase - Minimal Implementation)
 # ============================================================================
