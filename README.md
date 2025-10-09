@@ -1,16 +1,16 @@
-# 🚀 NuAWS - Unified AWS CLI Module for Nushell
+# 🚀 AWS CLI Nushell Generator System
 
-**One module to rule them all** - A comprehensive, pre-generated, immediately usable Nushell module that provides seamless access to the entire AWS CLI with native Nushell ergonomics, type safety, and pipeline integration.
+**Complete auto-generation for AWS CLI in Nushell** - A comprehensive generator system that creates fully-featured AWS CLI wrappers with native Nushell ergonomics, type safety, and pipeline integration.
 
 ## ✨ Key Features
 
-- **🎯 Zero Generation Time**: All AWS services pre-generated and available immediately
-- **📦 Single Entry Point**: `nuaws.nu` routes all AWS commands seamlessly  
-- **🔧 Native Pipeline Integration**: All commands return structured Nushell data
-- **🛡️ Type Safety**: Intelligent parameter validation and completion
-- **📋 Easy Distribution**: Simple git clone or package manager installation
-- **🧪 Mock Mode Support**: Built-in testing capabilities for all services
-- **⚡ 30,000+ Operations**: Comprehensive coverage across major AWS services
+- **🎯 Complete Auto-Generation**: Generate any AWS service from CLI help or schemas
+- **📦 Universal Generator**: Single generator creates all AWS services  
+- **🔧 Native Pipeline Integration**: All generated commands return structured Nushell data
+- **🛡️ Type Safety**: Intelligent parameter validation and completion generation
+- **📋 Schema Extraction**: Pull AWS service schemas directly from CLI help
+- **🧪 Mock Mode Support**: Built-in testing capabilities for all generated services
+- **⚡ Unlimited Coverage**: Generate any AWS service that has CLI support
 
 ## 🚀 Quick Start
 
@@ -19,7 +19,6 @@
 ```bash
 git clone https://github.com/user/aws-cli-nushell
 cd aws-cli-nushell
-use nuaws.nu  # Everything ready immediately!
 ```
 
 ### Prerequisites
@@ -27,52 +26,68 @@ use nuaws.nu  # Everything ready immediately!
 - Nushell 0.107.0 or later
 - AWS CLI v2 installed and configured (for live operations)
 
+### Generate AWS Services
+
+```nushell
+# Generate a specific AWS service
+nu build.nu --service s3 --with-completions --with-tests
+
+# Generate all common AWS services
+nu build.nu --all --with-completions
+
+# Pull schemas from AWS CLI help (for enhanced generation)
+nu build.nu pull-aws-schemas --all
+
+# Use the core generator directly
+use generator.nu generate-aws-service
+generate-aws-service ec2 --with-completions --with-tests
+```
+
 ### Usage Examples
 
 ```nushell
-# Use the unified module directly
-use modules/s3.nu *
+# After generation, use the services
+use s3.nu *
 
-# High-level S3 commands with structured output
-aws s3 ls | table                                    # List all buckets
-aws s3 ls s3://my-bucket | where type == "object"    # List objects only
-aws s3 cp file.txt s3://bucket/key | table           # Copy with status table
+# Generated commands return structured Nushell data
+aws s3 list-buckets | table              # API bucket listing as table
+aws s3 list-objects-v2 --bucket my-bucket | get contents
 
-# Low-level S3 API commands
-aws s3 list-buckets | get buckets | table            # API bucket listing
-aws s3 create-bucket --bucket my-new-bucket --region us-west-2
-
-# Or use the router for any AWS service
-nuaws s3 ls                           # Routes to high-level commands
-nuaws s3 list-buckets                 # Routes to API commands
-nuaws ec2 describe-instances          # EC2 operations
-nuaws iam list-users                  # IAM operations
-
-# Show available services and operations
-nuaws help
-
-# Get help for a specific service
-nuaws s3 help
+# Use the router for any generated service  
+use nuaws.nu
+nuaws s3 list-buckets                     # Routes to generated S3 module
+nuaws ec2 describe-instances              # Routes to generated EC2 module
+nuaws iam list-users                      # Routes to generated IAM module
 ```
 
-## 🏗️ Project Structure (Distribution Model)
+## 🏗️ Core Generator System Structure
 
 ```
 aws-cli-nushell/
-├── modules/              # ✅ Pre-generated service modules
-│   ├── s3.nu            #     S3 operations (900+ commands)
-│   ├── ec2.nu           #     EC2 operations (400+ commands)  
-│   ├── iam.nu           #     IAM operations (200+ commands)
-│   ├── stepfunctions.nu #     Step Functions (37 commands)
-│   └── mod.nu           #     Unified module exports
-├── completions/          # ✅ Pre-generated external completions
-│   ├── s3.nu            #     S3 completions
-│   ├── ec2.nu           #     EC2 completions
-│   └── mod.nu           #     Unified completions
-├── nuaws.nu              # 🎯 Main unified entry point and router
-├── build.nu              # 🔧 Build system (for development)
-├── schemas/              # 📄 AWS service JSON schemas
-└── README.md             # 📖 This file
+├── 🎯 Core Generators
+│   ├── generator.nu                    # Universal AWS service generator
+│   ├── type_system_generator.nu        # AWS to Nushell type mapping
+│   ├── completion_system_generator.nu  # External completions generator
+│   └── mod.nu                         # Unified generator system
+├── 📡 Schema Extraction  
+│   ├── aws_cli_command_extractor.nu    # Extract commands from AWS CLI
+│   └── extract_aws_commands.nu         # Alternative extraction method
+├── 🔧 Build & Utilities
+│   ├── build.nu                       # Build system with schema pulling
+│   ├── nuaws.nu                       # Router (for generated services)
+│   ├── errors.nu                      # Error handling utilities
+│   ├── functional.nu                  # Functional programming utilities
+│   └── services.nu                    # Service configuration
+├── 🧪 Testing Framework
+│   └── nutest/                        # Comprehensive testing framework
+├── 📚 Documentation & Specs
+│   ├── openspec/                      # Architecture specifications
+│   ├── README.md                      # This file
+│   └── CLAUDE.md                      # Development guidelines
+└── 📁 Generated (after build)
+    ├── *.nu                          # Generated service modules
+    ├── completions_*.nu              # Generated completions
+    └── test_*.nu                     # Generated test suites
 ```
 
 ## 🎯 Architecture
