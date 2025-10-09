@@ -23,16 +23,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-AWS CLI Nushell is a comprehensive AWS CLI implementation specifically designed for Nushell scripts. It provides type-safe wrappers for AWS services with extensive testing capabilities, mocking support, and pure functional programming patterns.
+AWS CLI Nushell is a comprehensive auto-generation system for creating AWS CLI wrappers specifically designed for Nushell. It provides complete auto-generation capabilities with type-safe wrappers, schema extraction from multiple sources (CLI help and boto3), extensive testing frameworks, and pure functional programming patterns.
 
 ## Architecture
 
 ### Core Components
 
-1. **Universal AWS Generator** (`universal_aws_generator.nu`): Single-file solution that can auto-generate complete AWS CLI wrappers for ANY AWS service by parsing AWS CLI help output
-2. **Service Modules** (`aws/*.nu`): Individual AWS service implementations (currently Step Functions with 37 commands)
-3. **Testing Framework** (`nutest/`): Comprehensive testing framework with discovery, execution, and reporting capabilities
-4. **Test Suites** (`tests/aws/`): Service-specific test implementations
+1. **Universal AWS Generator** (`generator.nu`): Single-file solution that can auto-generate complete AWS CLI wrappers for ANY AWS service by parsing AWS CLI help output or boto3 schemas
+2. **Type System Generator** (`type_system_generator.nu`): Maps AWS types to Nushell equivalents with comprehensive validation
+3. **Completion System Generator** (`completion_system_generator.nu`): Creates external completions for dynamic AWS resource discovery  
+4. **Schema Extractors** (`aws_cli_command_extractor.nu`, `extract_aws_commands.nu`): Extract service schemas from AWS CLI help or boto3/botocore models
+5. **Testing Framework** (`nutest/`): Comprehensive testing framework with discovery, execution, and reporting capabilities
+6. **Build System** (`build.nu`): Orchestrates generation with support for CLI and boto3 schema sources
 
 ### Key Design Patterns
 
@@ -63,10 +65,17 @@ nu simple_test_runner.nu
 
 ```nushell
 # Generate a complete AWS service wrapper (example: S3)
-nu universal_aws_generator.nu s3
+nu build.nu --service s3 --with-completions --with-tests
 
-# Generate multiple services at once
-nu -c "['dynamodb', 'lambda', 'ecs'] | each { |svc| nu universal_aws_generator.nu $svc }"
+# Generate all common services
+nu build.nu --all --with-completions
+
+# Extract schemas from both sources
+nu build.nu pull-aws-schemas --all --source both
+
+# Use the generator directly
+use generator.nu generate-aws-service
+generate-aws-service ec2 --with-completions --with-tests
 ```
 
 ### Service Testing
