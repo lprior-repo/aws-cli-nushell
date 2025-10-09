@@ -1,0 +1,37 @@
+{
+    name: "nuaws",
+    version: "2.0.0",
+    description: "Native Nushell AWS CLI with advanced features including streaming, caching, and service-specific enhancements",
+    license: "MIT",
+    authors: ["NuAWS Contributors"],
+    repository: "https://github.com/example/nuaws",
+    keywords: ["aws", "cli", "nushell", "cloud"],
+    
+    dependencies: {},
+    
+    scripts: {
+        build: "nu build.nu",
+        test: "nu -c 'use nutest/nutest/mod.nu; mod run-tests'",
+        validate: "nu -c 'use tools/mod.nu; project check'"
+    },
+    
+    entry: "nuaws.nu",
+    
+    # Package configuration
+    package: {
+        include: [
+            "nuaws.nu",
+            "nuaws/",
+            "modules/",
+            "completions/",
+            "schemas/",
+            "README.md"
+        ],
+        exclude: [
+            "logs/",
+            "cache/",
+            "build-summary.json",
+            "*.tmp"
+        ]
+    }
+}

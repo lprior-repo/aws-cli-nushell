@@ -1,0 +1,384 @@
+{
+  "service": "lambda",
+  "version": "aws-cli-extracted",
+  "generated_at": "2025-10-08 18:08:04",
+  "source": "aws_cli_help",
+  "command_count": 75,
+  "operations": [
+    {
+      "name": "Microsoft Windows versions that have updates  from  January  2005  or",
+      "aws_command": "Microsoft Windows versions that have updates  from  January  2005  or",
+      "description": "AWS lambda Microsoft Windows versions that have updates  from  January  2005  or operation"
+    },
+    {
+      "name": "Mac OS X 10.4 with Java for Mac OS X 10.4 Release 5 (February  2007),",
+      "aws_command": "Mac OS X 10.4 with Java for Mac OS X 10.4 Release 5 (February  2007),",
+      "description": "AWS lambda Mac OS X 10.4 with Java for Mac OS X 10.4 Release 5 (February  2007), operation"
+    },
+    {
+      "name": "Red Hat Enterprise Linux 5 (March 2007), 6, and 7 and  CentOS  5,  6,",
+      "aws_command": "Red Hat Enterprise Linux 5 (March 2007), 6, and 7 and  CentOS  5,  6,",
+      "description": "AWS lambda Red Hat Enterprise Linux 5 (March 2007), 6, and 7 and  CentOS  5,  6, operation"
+    },
+    {
+      "name": "Java 1.4.2_12 (May 2006), 5 Update 2 (March 2005), and all later ver-",
+      "aws_command": "Java 1.4.2_12 (May 2006), 5 Update 2 (March 2005), and all later ver-",
+      "description": "AWS lambda Java 1.4.2_12 (May 2006), 5 Update 2 (March 2005), and all later ver- operation"
+    },
+    {
+      "name": "Amazon Root CA 1",
+      "aws_command": "Amazon Root CA 1",
+      "description": "AWS lambda Amazon Root CA 1 operation"
+    },
+    {
+      "name": "Starfield Services Root Certificate Authority - G2",
+      "aws_command": "Starfield Services Root Certificate Authority - G2",
+      "description": "AWS lambda Starfield Services Root Certificate Authority - G2 operation"
+    },
+    {
+      "name": "Starfield Class 2 Certification Authority",
+      "aws_command": "Starfield Class 2 Certification Authority",
+      "description": "AWS lambda Starfield Class 2 Certification Authority operation"
+    },
+    {
+      "name": "add-layer-version-permission",
+      "aws_command": "add-layer-version-permission",
+      "description": "AWS lambda add-layer-version-permission operation"
+    },
+    {
+      "name": "add-permission",
+      "aws_command": "add-permission",
+      "description": "AWS lambda add-permission operation"
+    },
+    {
+      "name": "create-alias",
+      "aws_command": "create-alias",
+      "description": "AWS lambda create-alias operation"
+    },
+    {
+      "name": "create-code-signing-config",
+      "aws_command": "create-code-signing-config",
+      "description": "AWS lambda create-code-signing-config operation"
+    },
+    {
+      "name": "create-event-source-mapping",
+      "aws_command": "create-event-source-mapping",
+      "description": "AWS lambda create-event-source-mapping operation"
+    },
+    {
+      "name": "create-function",
+      "aws_command": "create-function",
+      "description": "AWS lambda create-function operation"
+    },
+    {
+      "name": "create-function-url-config",
+      "aws_command": "create-function-url-config",
+      "description": "AWS lambda create-function-url-config operation"
+    },
+    {
+      "name": "delete-alias",
+      "aws_command": "delete-alias",
+      "description": "AWS lambda delete-alias operation"
+    },
+    {
+      "name": "delete-code-signing-config",
+      "aws_command": "delete-code-signing-config",
+      "description": "AWS lambda delete-code-signing-config operation"
+    },
+    {
+      "name": "delete-event-source-mapping",
+      "aws_command": "delete-event-source-mapping",
+      "description": "AWS lambda delete-event-source-mapping operation"
+    },
+    {
+      "name": "delete-function",
+      "aws_command": "delete-function",
+      "description": "AWS lambda delete-function operation"
+    },
+    {
+      "name": "delete-function-code-signing-config",
+      "aws_command": "delete-function-code-signing-config",
+      "description": "AWS lambda delete-function-code-signing-config operation"
+    },
+    {
+      "name": "delete-function-concurrency",
+      "aws_command": "delete-function-concurrency",
+      "description": "AWS lambda delete-function-concurrency operation"
+    },
+    {
+      "name": "delete-function-event-invoke-config",
+      "aws_command": "delete-function-event-invoke-config",
+      "description": "AWS lambda delete-function-event-invoke-config operation"
+    },
+    {
+      "name": "delete-function-url-config",
+      "aws_command": "delete-function-url-config",
+      "description": "AWS lambda delete-function-url-config operation"
+    },
+    {
+      "name": "delete-layer-version",
+      "aws_command": "delete-layer-version",
+      "description": "AWS lambda delete-layer-version operation"
+    },
+    {
+      "name": "delete-provisioned-concurrency-config",
+      "aws_command": "delete-provisioned-concurrency-config",
+      "description": "AWS lambda delete-provisioned-concurrency-config operation"
+    },
+    {
+      "name": "get-account-settings",
+      "aws_command": "get-account-settings",
+      "description": "AWS lambda get-account-settings operation"
+    },
+    {
+      "name": "get-alias",
+      "aws_command": "get-alias",
+      "description": "AWS lambda get-alias operation"
+    },
+    {
+      "name": "get-code-signing-config",
+      "aws_command": "get-code-signing-config",
+      "description": "AWS lambda get-code-signing-config operation"
+    },
+    {
+      "name": "get-event-source-mapping",
+      "aws_command": "get-event-source-mapping",
+      "description": "AWS lambda get-event-source-mapping operation"
+    },
+    {
+      "name": "get-function",
+      "aws_command": "get-function",
+      "description": "AWS lambda get-function operation"
+    },
+    {
+      "name": "get-function-code-signing-config",
+      "aws_command": "get-function-code-signing-config",
+      "description": "AWS lambda get-function-code-signing-config operation"
+    },
+    {
+      "name": "get-function-concurrency",
+      "aws_command": "get-function-concurrency",
+      "description": "AWS lambda get-function-concurrency operation"
+    },
+    {
+      "name": "get-function-configuration",
+      "aws_command": "get-function-configuration",
+      "description": "AWS lambda get-function-configuration operation"
+    },
+    {
+      "name": "get-function-event-invoke-config",
+      "aws_command": "get-function-event-invoke-config",
+      "description": "AWS lambda get-function-event-invoke-config operation"
+    },
+    {
+      "name": "get-function-recursion-config",
+      "aws_command": "get-function-recursion-config",
+      "description": "AWS lambda get-function-recursion-config operation"
+    },
+    {
+      "name": "get-function-url-config",
+      "aws_command": "get-function-url-config",
+      "description": "AWS lambda get-function-url-config operation"
+    },
+    {
+      "name": "get-layer-version",
+      "aws_command": "get-layer-version",
+      "description": "AWS lambda get-layer-version operation"
+    },
+    {
+      "name": "get-layer-version-by-arn",
+      "aws_command": "get-layer-version-by-arn",
+      "description": "AWS lambda get-layer-version-by-arn operation"
+    },
+    {
+      "name": "get-layer-version-policy",
+      "aws_command": "get-layer-version-policy",
+      "description": "AWS lambda get-layer-version-policy operation"
+    },
+    {
+      "name": "get-policy",
+      "aws_command": "get-policy",
+      "description": "AWS lambda get-policy operation"
+    },
+    {
+      "name": "get-provisioned-concurrency-config",
+      "aws_command": "get-provisioned-concurrency-config",
+      "description": "AWS lambda get-provisioned-concurrency-config operation"
+    },
+    {
+      "name": "get-runtime-management-config",
+      "aws_command": "get-runtime-management-config",
+      "description": "AWS lambda get-runtime-management-config operation"
+    },
+    {
+      "name": "invoke",
+      "aws_command": "invoke",
+      "description": "AWS lambda invoke operation"
+    },
+    {
+      "name": "list-aliases",
+      "aws_command": "list-aliases",
+      "description": "AWS lambda list-aliases operation"
+    },
+    {
+      "name": "list-code-signing-configs",
+      "aws_command": "list-code-signing-configs",
+      "description": "AWS lambda list-code-signing-configs operation"
+    },
+    {
+      "name": "list-event-source-mappings",
+      "aws_command": "list-event-source-mappings",
+      "description": "AWS lambda list-event-source-mappings operation"
+    },
+    {
+      "name": "list-function-event-invoke-configs",
+      "aws_command": "list-function-event-invoke-configs",
+      "description": "AWS lambda list-function-event-invoke-configs operation"
+    },
+    {
+      "name": "list-function-url-configs",
+      "aws_command": "list-function-url-configs",
+      "description": "AWS lambda list-function-url-configs operation"
+    },
+    {
+      "name": "list-functions",
+      "aws_command": "list-functions",
+      "description": "AWS lambda list-functions operation"
+    },
+    {
+      "name": "list-functions-by-code-signing-config",
+      "aws_command": "list-functions-by-code-signing-config",
+      "description": "AWS lambda list-functions-by-code-signing-config operation"
+    },
+    {
+      "name": "list-layer-versions",
+      "aws_command": "list-layer-versions",
+      "description": "AWS lambda list-layer-versions operation"
+    },
+    {
+      "name": "list-layers",
+      "aws_command": "list-layers",
+      "description": "AWS lambda list-layers operation"
+    },
+    {
+      "name": "list-provisioned-concurrency-configs",
+      "aws_command": "list-provisioned-concurrency-configs",
+      "description": "AWS lambda list-provisioned-concurrency-configs operation"
+    },
+    {
+      "name": "list-tags",
+      "aws_command": "list-tags",
+      "description": "AWS lambda list-tags operation"
+    },
+    {
+      "name": "list-versions-by-function",
+      "aws_command": "list-versions-by-function",
+      "description": "AWS lambda list-versions-by-function operation"
+    },
+    {
+      "name": "publish-layer-version",
+      "aws_command": "publish-layer-version",
+      "description": "AWS lambda publish-layer-version operation"
+    },
+    {
+      "name": "publish-version",
+      "aws_command": "publish-version",
+      "description": "AWS lambda publish-version operation"
+    },
+    {
+      "name": "put-function-code-signing-config",
+      "aws_command": "put-function-code-signing-config",
+      "description": "AWS lambda put-function-code-signing-config operation"
+    },
+    {
+      "name": "put-function-concurrency",
+      "aws_command": "put-function-concurrency",
+      "description": "AWS lambda put-function-concurrency operation"
+    },
+    {
+      "name": "put-function-event-invoke-config",
+      "aws_command": "put-function-event-invoke-config",
+      "description": "AWS lambda put-function-event-invoke-config operation"
+    },
+    {
+      "name": "put-function-recursion-config",
+      "aws_command": "put-function-recursion-config",
+      "description": "AWS lambda put-function-recursion-config operation"
+    },
+    {
+      "name": "put-provisioned-concurrency-config",
+      "aws_command": "put-provisioned-concurrency-config",
+      "description": "AWS lambda put-provisioned-concurrency-config operation"
+    },
+    {
+      "name": "put-runtime-management-config",
+      "aws_command": "put-runtime-management-config",
+      "description": "AWS lambda put-runtime-management-config operation"
+    },
+    {
+      "name": "remove-layer-version-permission",
+      "aws_command": "remove-layer-version-permission",
+      "description": "AWS lambda remove-layer-version-permission operation"
+    },
+    {
+      "name": "remove-permission",
+      "aws_command": "remove-permission",
+      "description": "AWS lambda remove-permission operation"
+    },
+    {
+      "name": "tag-resource",
+      "aws_command": "tag-resource",
+      "description": "AWS lambda tag-resource operation"
+    },
+    {
+      "name": "untag-resource",
+      "aws_command": "untag-resource",
+      "description": "AWS lambda untag-resource operation"
+    },
+    {
+      "name": "update-alias",
+      "aws_command": "update-alias",
+      "description": "AWS lambda update-alias operation"
+    },
+    {
+      "name": "update-code-signing-config",
+      "aws_command": "update-code-signing-config",
+      "description": "AWS lambda update-code-signing-config operation"
+    },
+    {
+      "name": "update-event-source-mapping",
+      "aws_command": "update-event-source-mapping",
+      "description": "AWS lambda update-event-source-mapping operation"
+    },
+    {
+      "name": "update-function-code",
+      "aws_command": "update-function-code",
+      "description": "AWS lambda update-function-code operation"
+    },
+    {
+      "name": "update-function-configuration",
+      "aws_command": "update-function-configuration",
+      "description": "AWS lambda update-function-configuration operation"
+    },
+    {
+      "name": "update-function-event-invoke-config",
+      "aws_command": "update-function-event-invoke-config",
+      "description": "AWS lambda update-function-event-invoke-config operation"
+    },
+    {
+      "name": "update-function-url-config",
+      "aws_command": "update-function-url-config",
+      "description": "AWS lambda update-function-url-config operation"
+    },
+    {
+      "name": "wait",
+      "aws_command": "wait",
+      "description": "AWS lambda wait operation"
+    },
+    {
+      "name": "wizard",
+      "aws_command": "wizard",
+      "description": "AWS lambda wizard operation"
+    }
+  ]
+}

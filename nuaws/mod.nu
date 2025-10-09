@@ -10,6 +10,9 @@ export use services.nu *
 # Re-export all completions (will be generated)
 export use completions.nu *
 
+# Re-export enhanced tools
+export use lambda_enhanced.nu *
+
 # ============================================================================
 # Main NuAWS Entry Points  
 # ============================================================================
@@ -98,7 +101,12 @@ export def "nuaws info" []: nothing -> record {
             "External completions",
             "Mock mode support", 
             "Comprehensive testing",
-            "Pipeline integration"
+            "Pipeline integration",
+            "Lambda enhanced features",
+            "SAM/Serverless integration",
+            "Real-time log streaming",
+            "Performance analysis",
+            "Cost optimization"
         ]
     }
 }

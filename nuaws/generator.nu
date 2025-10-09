@@ -135,8 +135,21 @@ def discover-service-from-cli [service: string]: nothing -> record {
 }
 
 # Parse operations from AWS CLI help output
-def parse-operations-from-help [help_lines: list<string>]: nothing -> list<record> {
-    let matches = ($help_lines | enumerate | where ($it.item | str contains "Available Commands"))
+export def parse-operations-from-help [help_lines: list<string>]: nothing -> list<record> {
+    # Handle both normal and doubled-character formatting
+    # Look for variations: "Available Commands", "AVAILABLE COMMANDS", "AAVVAAIILLAABBLLEE CCOOMMMMAANNDDSS"
+    let matches = ($help_lines | enumerate | where { |item|
+        let line = $item.item
+        # Remove backspace formatting (^H characters) used for bold text
+        let clean_line = ($line | str replace --all "\u{08}" "")
+        # Check for normal case variations and doubled character formatting
+        (($clean_line | str contains "Available Commands") or
+         ($clean_line | str contains "AVAILABLE COMMANDS") or
+         ($clean_line | str contains "AAVVAAIILLAABBLLEE CCOOMMMMAANNDDSS") or
+         ($line | str contains "Available Commands") or
+         ($line | str contains "AVAILABLE COMMANDS"))
+    })
+    
     let operations_start = if ($matches | is-empty) { -1 } else { $matches | get index | first }
     
     if $operations_start == -1 {
@@ -145,17 +158,26 @@ def parse-operations-from-help [help_lines: list<string>]: nothing -> list<recor
     
     $help_lines 
     | skip ($operations_start + 1)
-    | take 50  # Reasonable limit
+    | take 100  # Increased limit for services with many commands
     | where ($it | str trim | str length) > 0
-    | where ($it | str starts-with " ")
+    | where { |line|
+        # Look for lines that start with whitespace and contain "+o " prefix (might have backspace chars)
+        let clean_line = ($line | str replace --all "\u{08}" "")
+        ($line | str starts-with " ") and (($line | str contains "+o ") or ($clean_line | str contains "+o "))
+    }
     | each { |line|
-        let trimmed = ($line | str trim)
-        let parts = ($trimmed | split row " " | where ($it | str length) > 0)
-        if ($parts | length) >= 1 {
-            {
-                name: ($parts | first),
-                description: ($parts | skip 1 | str join " "),
-                parameters: []
+        # Clean backspace characters first
+        let clean_line = ($line | str replace --all "\u{08}" "" | str trim)
+        # Remove the "+o " prefix and extract command name
+        if ($clean_line | str starts-with "+o ") {
+            let command_part = ($clean_line | str replace "+o " "")
+            let parts = ($command_part | split row " " | where ($it | str length) > 0)
+            if ($parts | length) >= 1 {
+                {
+                    name: ($parts | first),
+                    description: ($parts | skip 1 | str join " "),
+                    parameters: []
+                }
             }
         }
     }
@@ -166,17 +188,18 @@ def parse-operations-from-help [help_lines: list<string>]: nothing -> list<recor
 # Unified Module Generation
 # ============================================================================
 
-# Build complete service module with all operations
+# Build complete service module with all operations and helper functions
 def build-unified-service-module [
     service: string,
     service_info: record,
     with_completions: bool
 ]: nothing -> string {
     let header = build-module-header $service $service_info
+    let helper_functions = generate-helper-functions $service
     let operations = ($service_info.operations | each { |op| build-operation-function $service $op $with_completions })
     let footer = build-module-footer $service
     
-    $header + "\n\n" + ($operations | str join "\n\n") + "\n\n" + $footer
+    $header + "\n\n" + $helper_functions + "\n\n" + ($operations | str join "\n\n") + "\n\n" + $footer
 }
 
 # Build module header with metadata and imports
@@ -235,16 +258,21 @@ def build-operation-function [
         $"            message: \"Mock response for ($service) ($operation.name)\"",
         "        }",
         "    } else {",
-        "        # Execute AWS CLI with error handling",
+        "        # Execute AWS CLI with enhanced error handling and span awareness",
         "        try {",
-        $"            aws ($aws_service) ($operation.name) | from json",
+        $"            let result = aws ($aws_service) ($operation.name) | from json",
+        "            # Apply response data transformation",
+        "            $result | transform-aws-response",
         "        } catch { |err|",
+        "            # Enhanced AWS error mapping with specific error codes",
+        "            let aws_error = parse-aws-error $err",
         "            error make {",
-        "                msg: $\"AWS CLI error: { $err.msg }\",",
+        "                msg: $\"AWS ($service) error: { $aws_error.message }\",",
         "                label: {",
-        "                    text: \"AWS operation failed\",",
+        "                    text: $\"($aws_error.code): ($aws_error.suggestion)\",",
         "                    span: (metadata $err).span",
-        "                }",
+        "                },",
+        "                help: $\"Use 'aws ($service) help ($operation.name)' for more information\"",
         "            }",
         "        }",
         "    }",
@@ -276,19 +304,21 @@ def build-parameter-list [
     "\n    " + ($param_strings | str join ",\n    ") + "\n"
 }
 
-# Build individual parameter with type and completion
+# Build individual parameter with enhanced type annotations and completion
 def build-parameter-string [
     param: record,
     with_completions: bool
 ]: nothing -> string {
     let param_name = ($param.name | str replace '-' '_')
-    let param_type = map-aws-type-to-nushell ($param.type? | default "string")
+    let type_info = map-aws-type-to-nushell ($param.type? | default "string")
     let is_required = ($param.required? | default false)
+    let description = ($param.description? | default $"AWS parameter: ($param.name)")
     
+    # Enhanced parameter with inline documentation
     let base_param = if $is_required {
-        $"($param_name): ($param_type)"
+        $"($param_name): ($type_info.nushell_type) # ($description)"
     } else {
-        $"--($param.name | str replace '_' '-'): ($param_type)"
+        $"--($param.name | str replace '_' '-'): ($type_info.nushell_type) # ($description)"
     }
     
     if $with_completions and (should-have-completion $param) {
@@ -299,18 +329,35 @@ def build-parameter-string [
     }
 }
 
-# Map AWS types to Nushell types
-def map-aws-type-to-nushell [aws_type: string]: nothing -> string {
+# Enhanced AWS type mapping with comprehensive annotations
+def map-aws-type-to-nushell [aws_type: string]: nothing -> record {
+    let type_info = match ($aws_type | str downcase) {
+        "string" => { nushell_type: "string", constraints: [], validation: "str length" },
+        "integer" | "int" | "long" => { nushell_type: "int", constraints: [], validation: "into int" },
+        "boolean" | "bool" => { nushell_type: "bool", constraints: [], validation: "into bool" }, 
+        "timestamp" | "datetime" => { nushell_type: "datetime", constraints: [], validation: "into datetime" },
+        "double" | "float" => { nushell_type: "float", constraints: [], validation: "into float" },
+        "blob" | "binary" => { nushell_type: "binary", constraints: [], validation: "into binary" },
+        "list" => { nushell_type: "list<string>", constraints: [], validation: "into list" },
+        "structure" | "object" => { nushell_type: "record", constraints: [], validation: "into record" },
+        _ => { nushell_type: "string", constraints: [], validation: "str length" }
+    }
+    
+    $type_info | upsert documentation (get-type-documentation $aws_type)
+}
+
+# Generate comprehensive type documentation
+def get-type-documentation [aws_type: string]: nothing -> string {
     match ($aws_type | str downcase) {
-        "string" => "string",
-        "integer" | "int" | "long" => "int",
-        "boolean" | "bool" => "bool", 
-        "timestamp" | "datetime" => "datetime",
-        "double" | "float" => "float",
-        "blob" | "binary" => "binary",
-        "list" => "list<string>",
-        "structure" | "object" => "record",
-        _ => "string"
+        "string" => "AWS String type - text data with UTF-8 encoding",
+        "integer" | "int" | "long" => "AWS Integer type - numeric data (32/64-bit)",
+        "boolean" | "bool" => "AWS Boolean type - true/false values", 
+        "timestamp" | "datetime" => "AWS Timestamp type - ISO 8601 datetime format",
+        "double" | "float" => "AWS Float type - decimal numeric data",
+        "blob" | "binary" => "AWS Blob type - binary data (base64 encoded)",
+        "list" => "AWS List type - ordered collection of items",
+        "structure" | "object" => "AWS Structure type - key-value record data",
+        _ => $"AWS ($aws_type) type - specialized AWS data structure"
     }
 }
 
@@ -346,6 +393,80 @@ def build-module-footer [service: string]: nothing -> string {
     $"# AWS ($service | str upcase) Service Module - End
 # Use 'aws ($service) info' to get service information
 # Use 'help aws ($service)' to see available operations"
+}
+
+# ============================================================================
+# Response Transformation and Error Handling Enhancement
+# ============================================================================
+
+# Generate AWS error parsing and response transformation functions
+def generate-helper-functions [service: string]: nothing -> string {
+    [
+        "# Enhanced AWS error parsing with specific error code mapping",
+        "def parse-aws-error [err: record]: nothing -> record {",
+        "    let error_msg = ($err.msg | default \"Unknown AWS error\")",
+        "    let aws_error_patterns = {",
+        "        \"AccessDenied\": { code: \"ACCESS_DENIED\", suggestion: \"Check IAM permissions\" },",
+        "        \"InvalidParameter\": { code: \"INVALID_PARAMETER\", suggestion: \"Verify parameter values\" },",
+        "        \"ResourceNotFound\": { code: \"NOT_FOUND\", suggestion: \"Check resource existence\" },",
+        "        \"ThrottlingException\": { code: \"THROTTLED\", suggestion: \"Reduce request rate\" },",
+        "        \"ServiceUnavailable\": { code: \"SERVICE_ERROR\", suggestion: \"Retry after delay\" }",
+        "    }",
+        "    ",
+        "    let matched_error = ($aws_error_patterns | transpose key value | where ($error_msg | str contains $it.key) | first)",
+        "    ",
+        "    if ($matched_error | is-empty) {",
+        "        { code: \"UNKNOWN_ERROR\", message: $error_msg, suggestion: \"Check AWS documentation\" }",
+        "    } else {",
+        "        $matched_error.value | upsert message $error_msg",
+        "    }",
+        "}",
+        "",
+        "# Transform AWS responses to Nushell-optimized data structures",
+        "def transform-aws-response []: record -> record {",
+        "    let response = $in",
+        "    # Convert PascalCase to snake_case for field names",
+        "    $response | transform-field-names | add-computed-fields",
+        "}",
+        "",
+        "# Convert AWS PascalCase field names to Nushell snake_case",
+        "def transform-field-names []: record -> record {",
+        "    let input = $in",
+        "    $input | transpose key value | each { |item|",
+        "        let snake_key = ($item.key | str replace --all --regex '([A-Z])' '_$1' | str downcase | str replace --regex '^_' '')",
+        "        { $snake_key: $item.value }",
+        "    } | reduce --fold {} { |item, acc| $acc | merge $item }",
+        "}",
+        "",
+        "# Add computed fields commonly used in Nushell pipelines",
+        "def add-computed-fields []: record -> record {",
+        "    let input = $in",
+        "    # Add timestamp conversions and computed fields",
+        "    $input | upsert computed_at (date now)",
+        "}",
+        "",
+        "# Validate function signature and parameters",
+        "def validate-aws-parameters [params: record, operation: string]: nothing -> nothing {",
+        "    # Parameter validation based on AWS constraints",
+        "    let required_params = get-required-parameters $operation",
+        "    ",
+        "    $required_params | each { |req_param|",
+        "        if not ($req_param in ($params | columns)) {",
+        "            error make {",
+        "                msg: $\"Missing required parameter: ($req_param)\",",
+        "                label: { text: \"Parameter validation failed\", span: (metadata $params).span }",
+        "            }",
+        "        }",
+        "    }",
+        "}",
+        "",
+        "# Get required parameters for operation (extend with schema data)",
+        "def get-required-parameters [operation: string]: nothing -> list<string> {",
+        "    # This would be populated from AWS schema data",
+        "    []",
+        "}",
+        ""
+    ] | str join "\n"
 }
 
 # ============================================================================

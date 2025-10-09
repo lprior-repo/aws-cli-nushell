@@ -1,0 +1,304 @@
+{
+  "service": "dynamodb",
+  "version": "aws-cli-extracted",
+  "generated_at": "2025-10-08 18:08:05",
+  "source": "aws_cli_help",
+  "command_count": 59,
+  "operations": [
+    {
+      "name": "batch-execute-statement",
+      "aws_command": "batch-execute-statement",
+      "description": "AWS dynamodb batch-execute-statement operation"
+    },
+    {
+      "name": "batch-get-item",
+      "aws_command": "batch-get-item",
+      "description": "AWS dynamodb batch-get-item operation"
+    },
+    {
+      "name": "batch-write-item",
+      "aws_command": "batch-write-item",
+      "description": "AWS dynamodb batch-write-item operation"
+    },
+    {
+      "name": "create-backup",
+      "aws_command": "create-backup",
+      "description": "AWS dynamodb create-backup operation"
+    },
+    {
+      "name": "create-global-table",
+      "aws_command": "create-global-table",
+      "description": "AWS dynamodb create-global-table operation"
+    },
+    {
+      "name": "create-table",
+      "aws_command": "create-table",
+      "description": "AWS dynamodb create-table operation"
+    },
+    {
+      "name": "delete-backup",
+      "aws_command": "delete-backup",
+      "description": "AWS dynamodb delete-backup operation"
+    },
+    {
+      "name": "delete-item",
+      "aws_command": "delete-item",
+      "description": "AWS dynamodb delete-item operation"
+    },
+    {
+      "name": "delete-resource-policy",
+      "aws_command": "delete-resource-policy",
+      "description": "AWS dynamodb delete-resource-policy operation"
+    },
+    {
+      "name": "delete-table",
+      "aws_command": "delete-table",
+      "description": "AWS dynamodb delete-table operation"
+    },
+    {
+      "name": "describe-backup",
+      "aws_command": "describe-backup",
+      "description": "AWS dynamodb describe-backup operation"
+    },
+    {
+      "name": "describe-continuous-backups",
+      "aws_command": "describe-continuous-backups",
+      "description": "AWS dynamodb describe-continuous-backups operation"
+    },
+    {
+      "name": "describe-contributor-insights",
+      "aws_command": "describe-contributor-insights",
+      "description": "AWS dynamodb describe-contributor-insights operation"
+    },
+    {
+      "name": "describe-endpoints",
+      "aws_command": "describe-endpoints",
+      "description": "AWS dynamodb describe-endpoints operation"
+    },
+    {
+      "name": "describe-export",
+      "aws_command": "describe-export",
+      "description": "AWS dynamodb describe-export operation"
+    },
+    {
+      "name": "describe-global-table",
+      "aws_command": "describe-global-table",
+      "description": "AWS dynamodb describe-global-table operation"
+    },
+    {
+      "name": "describe-global-table-settings",
+      "aws_command": "describe-global-table-settings",
+      "description": "AWS dynamodb describe-global-table-settings operation"
+    },
+    {
+      "name": "describe-import",
+      "aws_command": "describe-import",
+      "description": "AWS dynamodb describe-import operation"
+    },
+    {
+      "name": "describe-kinesis-streaming-destination",
+      "aws_command": "describe-kinesis-streaming-destination",
+      "description": "AWS dynamodb describe-kinesis-streaming-destination operation"
+    },
+    {
+      "name": "describe-limits",
+      "aws_command": "describe-limits",
+      "description": "AWS dynamodb describe-limits operation"
+    },
+    {
+      "name": "describe-table",
+      "aws_command": "describe-table",
+      "description": "AWS dynamodb describe-table operation"
+    },
+    {
+      "name": "describe-table-replica-auto-scaling",
+      "aws_command": "describe-table-replica-auto-scaling",
+      "description": "AWS dynamodb describe-table-replica-auto-scaling operation"
+    },
+    {
+      "name": "describe-time-to-live",
+      "aws_command": "describe-time-to-live",
+      "description": "AWS dynamodb describe-time-to-live operation"
+    },
+    {
+      "name": "disable-kinesis-streaming-destination",
+      "aws_command": "disable-kinesis-streaming-destination",
+      "description": "AWS dynamodb disable-kinesis-streaming-destination operation"
+    },
+    {
+      "name": "enable-kinesis-streaming-destination",
+      "aws_command": "enable-kinesis-streaming-destination",
+      "description": "AWS dynamodb enable-kinesis-streaming-destination operation"
+    },
+    {
+      "name": "execute-statement",
+      "aws_command": "execute-statement",
+      "description": "AWS dynamodb execute-statement operation"
+    },
+    {
+      "name": "execute-transaction",
+      "aws_command": "execute-transaction",
+      "description": "AWS dynamodb execute-transaction operation"
+    },
+    {
+      "name": "export-table-to-point-in-time",
+      "aws_command": "export-table-to-point-in-time",
+      "description": "AWS dynamodb export-table-to-point-in-time operation"
+    },
+    {
+      "name": "get-item",
+      "aws_command": "get-item",
+      "description": "AWS dynamodb get-item operation"
+    },
+    {
+      "name": "get-resource-policy",
+      "aws_command": "get-resource-policy",
+      "description": "AWS dynamodb get-resource-policy operation"
+    },
+    {
+      "name": "import-table",
+      "aws_command": "import-table",
+      "description": "AWS dynamodb import-table operation"
+    },
+    {
+      "name": "list-backups",
+      "aws_command": "list-backups",
+      "description": "AWS dynamodb list-backups operation"
+    },
+    {
+      "name": "list-contributor-insights",
+      "aws_command": "list-contributor-insights",
+      "description": "AWS dynamodb list-contributor-insights operation"
+    },
+    {
+      "name": "list-exports",
+      "aws_command": "list-exports",
+      "description": "AWS dynamodb list-exports operation"
+    },
+    {
+      "name": "list-global-tables",
+      "aws_command": "list-global-tables",
+      "description": "AWS dynamodb list-global-tables operation"
+    },
+    {
+      "name": "list-imports",
+      "aws_command": "list-imports",
+      "description": "AWS dynamodb list-imports operation"
+    },
+    {
+      "name": "list-tables",
+      "aws_command": "list-tables",
+      "description": "AWS dynamodb list-tables operation"
+    },
+    {
+      "name": "list-tags-of-resource",
+      "aws_command": "list-tags-of-resource",
+      "description": "AWS dynamodb list-tags-of-resource operation"
+    },
+    {
+      "name": "put-item",
+      "aws_command": "put-item",
+      "description": "AWS dynamodb put-item operation"
+    },
+    {
+      "name": "put-resource-policy",
+      "aws_command": "put-resource-policy",
+      "description": "AWS dynamodb put-resource-policy operation"
+    },
+    {
+      "name": "query",
+      "aws_command": "query",
+      "description": "AWS dynamodb query operation"
+    },
+    {
+      "name": "restore-table-from-backup",
+      "aws_command": "restore-table-from-backup",
+      "description": "AWS dynamodb restore-table-from-backup operation"
+    },
+    {
+      "name": "restore-table-to-point-in-time",
+      "aws_command": "restore-table-to-point-in-time",
+      "description": "AWS dynamodb restore-table-to-point-in-time operation"
+    },
+    {
+      "name": "scan",
+      "aws_command": "scan",
+      "description": "AWS dynamodb scan operation"
+    },
+    {
+      "name": "tag-resource",
+      "aws_command": "tag-resource",
+      "description": "AWS dynamodb tag-resource operation"
+    },
+    {
+      "name": "transact-get-items",
+      "aws_command": "transact-get-items",
+      "description": "AWS dynamodb transact-get-items operation"
+    },
+    {
+      "name": "transact-write-items",
+      "aws_command": "transact-write-items",
+      "description": "AWS dynamodb transact-write-items operation"
+    },
+    {
+      "name": "untag-resource",
+      "aws_command": "untag-resource",
+      "description": "AWS dynamodb untag-resource operation"
+    },
+    {
+      "name": "update-continuous-backups",
+      "aws_command": "update-continuous-backups",
+      "description": "AWS dynamodb update-continuous-backups operation"
+    },
+    {
+      "name": "update-contributor-insights",
+      "aws_command": "update-contributor-insights",
+      "description": "AWS dynamodb update-contributor-insights operation"
+    },
+    {
+      "name": "update-global-table",
+      "aws_command": "update-global-table",
+      "description": "AWS dynamodb update-global-table operation"
+    },
+    {
+      "name": "update-global-table-settings",
+      "aws_command": "update-global-table-settings",
+      "description": "AWS dynamodb update-global-table-settings operation"
+    },
+    {
+      "name": "update-item",
+      "aws_command": "update-item",
+      "description": "AWS dynamodb update-item operation"
+    },
+    {
+      "name": "update-kinesis-streaming-destination",
+      "aws_command": "update-kinesis-streaming-destination",
+      "description": "AWS dynamodb update-kinesis-streaming-destination operation"
+    },
+    {
+      "name": "update-table",
+      "aws_command": "update-table",
+      "description": "AWS dynamodb update-table operation"
+    },
+    {
+      "name": "update-table-replica-auto-scaling",
+      "aws_command": "update-table-replica-auto-scaling",
+      "description": "AWS dynamodb update-table-replica-auto-scaling operation"
+    },
+    {
+      "name": "update-time-to-live",
+      "aws_command": "update-time-to-live",
+      "description": "AWS dynamodb update-time-to-live operation"
+    },
+    {
+      "name": "wait",
+      "aws_command": "wait",
+      "description": "AWS dynamodb wait operation"
+    },
+    {
+      "name": "wizard",
+      "aws_command": "wizard",
+      "description": "AWS dynamodb wizard operation"
+    }
+  ]
+}
